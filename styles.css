@@ -1,132 +1,212 @@
-/* ============================================================
-   GLOBAL — Reset dan dasar
-   ============================================================ */
-
-* {
-  box-sizing: border-box; /* padding tidak menambah lebar elemen */
-  margin: 0;
-  padding: 0;
+/* ─────────────────────────────────────────────────────
+   CSS VARIABLES (Custom Properties)
+   
+   Kenapa: kalau warna aksen dipakai 15 kali di file ini,
+   dan kamu mau ganti — ubah SATU baris di sini, semua ikut.
+   Tanpa ini, kamu harus ctrl+F dan ganti satu-satu.
+   ───────────────────────────────────────────────────── */
+:root {
+    --bg:        #0d0d0d;
+    --surface:   #141414;
+    --teks:      #e0e0e0;
+    --redup:     #777777;
+    --aksen:     #e2b940;
+    --border:    #2a2a2a;
+    --radius:    8px;
 }
 
+/* ─────────────────────────────────────────────────────
+   RESET DASAR
+   
+   Browser (Chrome, Firefox, dll) punya style default
+   sendiri. Contoh: <h1> punya margin bawaan, <body>
+   punya margin 8px. Reset ini menghapus semua itu
+   supaya kamu yang pegang kendali penuh.
+   
+   box-sizing: border-box → kalau kamu set width: 200px
+   dan padding: 20px, total tetap 200px (padding masuk ke dalam).
+   Default browser: total jadi 240px (200 + 2×20). Membingungkan.
+   ───────────────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ─────────────────────────────────────────────────────
+   BODY
+   ───────────────────────────────────────────────────── */
 body {
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  font-size: 16px;
-  line-height: 1.7;
-  color: #1a1a1a;
-  background-color: #f5f5f3;
+    background-color: var(--bg);
+    color: var(--teks);
+    font-family: 'Courier New', monospace;
+    line-height: 1.7;      /* jarak antar baris. 1.5–1.8 ideal untuk dibaca */
+    min-height: 100vh;     /* background penuh walau konten pendek */
 }
 
-/* ============================================================
-   HEADER — Foto profil di tengah
-   ============================================================ */
-
+/* ─────────────────────────────────────────────────────
+   HEADER
+   
+   FLEXBOX: display: flex mengaktifkan flexbox pada header.
+   Elemen anak (img) sekarang bisa diposisikan dengan:
+   
+   - flex-direction: row   → susun ke kanan (default)
+   - flex-direction: column → susun ke bawah
+   - justify-content: center → tengah di sumbu utama
+   - align-items: center   → tengah di sumbu silang
+   ───────────────────────────────────────────────────── */
 header {
-  display: flex;           /* aktifkan flexbox */
-  justify-content: center; /* horizontal: tengah */
-  padding: 40px 16px 28px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e8e8e5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px 40px;  /* shorthand: atas kanan bawah kiri */
 }
 
 header img {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;      /* buat jadi lingkaran */
-  object-fit: cover;       /* gambar tidak gepeng */
-  border: 2px solid #b5d4f4;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;        /* 50% = lingkaran sempurna */
+    object-fit: cover;         /* gambar di-crop rapi, tidak gepeng/molor */
+    border: 3px solid var(--aksen);
 }
 
-/* ============================================================
-   MAIN — Konten utama
-   ============================================================ */
-
+/* ─────────────────────────────────────────────────────
+   MAIN
+   
+   max-width + margin: 0 auto = pola standar untuk
+   membatasi lebar konten dan membuatnya center.
+   
+   auto pada margin kiri-kanan berarti browser membagi
+   sisa ruang secara merata ke kiri dan kanan → center.
+   ───────────────────────────────────────────────────── */
 main {
-  max-width: 560px;        /* batas lebar agar tidak terlalu lebar di desktop */
-  margin: 0 auto;          /* otomatis rata tengah horizontal */
-  padding: 32px 20px;
-  background-color: #ffffff;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
 }
 
 main h2 {
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: 12px;
+    font-size: 1.5rem;
+    color: var(--aksen);
+    margin-bottom: 12px;
 }
 
+/* Selector "main > p" berarti: hanya <p> yang langsung
+   ada di dalam <main>, bukan <p> di dalam .project */
 main > p {
-  font-size: 15px;
-  color: #555;
-  border-left: 3px solid #b5d4f4; /* aksen garis kiri */
-  padding-left: 14px;
-  margin-bottom: 28px;
+    color: var(--redup);
+    font-size: 0.9rem;
+    margin-bottom: 48px;
 }
 
-/* ============================================================
-   PROJECT CARD — Kartu proyek
-   ============================================================ */
-
+/* ─────────────────────────────────────────────────────
+   PROJECT CARD — Box Model dalam aksi
+   
+   BOX MODEL (dari dalam ke luar):
+   [CONTENT] → [PADDING] → [BORDER] → [MARGIN]
+   
+   padding: 24px  → ruang di DALAM card
+   border: 1px    → garis tepi card
+   margin-bottom  → jarak ke card berikutnya di LUAR
+   ───────────────────────────────────────────────────── */
 .project {
-  border: 1px solid #e8e8e5;
-  border-radius: 12px;
-  overflow: hidden;        /* gambar tidak keluar batas border-radius */
-  background-color: #fafaf8;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+    transition: border-color 0.2s;  /* animasi halus saat hover */
+}
+
+/* :hover = state ketika kursor di atas elemen */
+.project:hover {
+    border-color: var(--aksen);
 }
 
 .project img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  display: block;          /* hapus gap bawah gambar */
+    width: 100%;        /* gambar ikuti lebar parent (.project) */
+    height: 180px;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;     /* hapus gap bawah gambar (bug default browser) */
+    margin-bottom: 16px;
 }
 
 .project h3 {
-  font-size: 16px;
-  font-weight: 500;
-  padding: 16px 16px 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--aksen);
+    margin-bottom: 8px;
 }
 
 .project p {
-  font-size: 14px;
-  color: #666;
-  padding: 0 16px 14px;
+    color: var(--redup);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 16px;
 }
 
+/* ─────────────────────────────────────────────────────
+   BUTTON
+   ───────────────────────────────────────────────────── */
 .project button {
-  margin: 0 16px 16px;
-  padding: 8px 18px;
-  border: 1px solid #378add;
-  border-radius: 8px;
-  background: transparent;
-  color: #185fa5;
-  font-size: 14px;
-  cursor: pointer;
+    background: transparent;
+    color: var(--aksen);
+    border: 1px solid var(--aksen);
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;           /* kursor jadi tangan */
+    font-family: inherit;      /* pakai font yang sama dengan parent */
+    font-size: 0.85rem;
+    transition: all 0.2s;
 }
 
 .project button:hover {
-  background-color: #e6f1fb; /* feedback visual saat hover */
+    background: var(--aksen);
+    color: var(--bg);
 }
 
-/* ============================================================
-   FOOTER — Ikon sosial media
-   ============================================================ */
-
+/* ─────────────────────────────────────────────────────
+   FOOTER
+   ───────────────────────────────────────────────────── */
 footer {
-  text-align: center;
-  padding: 24px 16px;
-  background-color: #ffffff;
-  border-top: 1px solid #e8e8e5;
+    display: flex;
+    justify-content: center;
+    padding: 32px 20px;
+    border-top: 1px solid var(--border);
 }
 
 footer a {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  color: #555;
-  font-size: 14px;
+    display: flex;             /* buat <a> jadi flex container */
+    align-items: center;       /* icon dan teks sejajar vertikal */
+    gap: 8px;                  /* jarak antara icon dan teks */
+    text-decoration: none;
+    color: var(--redup);
+    font-size: 0.85rem;
+    transition: color 0.2s;
+}
+
+footer a:hover {
+    color: var(--teks);
 }
 
 footer img {
-  width: 24px;
-  height: 24px;
+    width: 24px;
+    height: 24px;
+    filter: invert(100%);
 }
+
+/* main h2       { --animate-delay: 0.1s; }
+main > p      { --animate-delay: 0.15s; }
+.project      { --animate-delay: 0.3s; }
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px); 
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} */
